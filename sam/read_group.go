@@ -103,6 +103,10 @@ func (r *ReadGroup) Clone() *ReadGroup {
 	return &cr
 }
 
+func (r *ReadGroup) SM() string { return r.sample }
+
+func (r *ReadGroup) DS() string { return r.description }
+
 // Library returns the library name for the read group.
 func (r *ReadGroup) Library() string { return r.library }
 

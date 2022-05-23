@@ -355,6 +355,7 @@ var iso8601 = []struct {
 	{isLocal: false, format: iso8601TimeThouDateNE},
 	{isLocal: true, format: iso8601TimeDateB},
 	{isLocal: true, format: iso8601TimeDateE},
+	{isLocal: true, format: "02-01-2006"},
 }
 
 func parseISO8601(value string) (time.Time, error) {

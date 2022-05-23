@@ -7,3 +7,38 @@
 //
 // http://samtools.github.io/hts-specs/SAMv1.pdf
 package bam
+
+import (
+	"errors"
+	"fmt"
+	"os"
+)
+
+func GetSampleName(fn string) (string, error) {
+	r, err := os.Open(fn)
+	if err != nil {
+		return "", fmt.Errorf("unable to open file: %s", err)
+	}
+	defer r.Close()
+
+	br, err := NewReader(r, 1)
+	if err != nil {
+		return "", fmt.Errorf("unable to create reader: %s", err)
+	}
+	defer br.Close()
+
+	rgs := br.Header().RGs()
+	if len(rgs) == 0 {
+		return "", errors.New("BAM has no read groups")
+	}
+	sm := ""
+	for _, rg := range rgs {
+		if sm == "" {
+			sm = rg.SM()
+		}
+		if sm != rg.SM() {
+			return "", errors.New("non-identical SM tags detected in read groups")
+		}
+	}
+	return sm, nil
+}
